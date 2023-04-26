@@ -1,6 +1,6 @@
-namespace SimpleStock.Domain.Model;
+namespace SimpleStock.Domain.Models;
 
-public class AddressModel : BaseEntityModel
+public class AddressModel : EntityModel
 {
     public string StreetName { get; set; } = null!;
     public string Number { get; set; } = null!;
@@ -10,5 +10,5 @@ public class AddressModel : BaseEntityModel
     public string State { get; set; } = null!;
     public string PostalCode { get; set; } = null!;
     public Guid CustomerId { get; set; }
-    public CustomerModel? Customer { get; set; }
+    public CustomerModel Customer { get; set; } = null!;
 }
