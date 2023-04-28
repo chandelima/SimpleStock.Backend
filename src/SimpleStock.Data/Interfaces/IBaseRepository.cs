@@ -1,11 +1,11 @@
 using SimpleStock.Domain.Models;
 
 namespace SimpleStock.Data.Interfaces;
-public interface IBaseRepository
+public interface IBaseRepository<T>
 {
-    Task<T?> GetById<T>(Guid id) where T : EntityModel;
-    Task<bool> Add<T>(T entity) where T : EntityModel;
-    Task<bool> Update<T>(T entity) where T : EntityModel;
-    Task<bool> Delete<T>(T entity) where T : EntityModel;
-    Task<bool> DeleteRange<T>(T[] entities) where T : EntityModel;
+    Task<T?> GetById(Guid id);
+    Task<bool> Add(T entity);
+    Task<bool> Update(T entity);
+    Task<bool> Delete(T entity);
+    Task<bool> DeleteRange(T[] entities);
 }
