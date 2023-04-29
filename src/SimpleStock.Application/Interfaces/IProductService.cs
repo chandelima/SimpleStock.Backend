@@ -1,13 +1,14 @@
 using SimpleStock.Domain.DTOs.Product;
 using SimpleStock.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SimpleStock.Exception;
 
 namespace SimpleStock.Application.Interfaces;
 public interface IProductService
 {
-    Task<ProductViewModel?> AddProduct(ProductInputModel input);
+    Task<ICollection<ProductResponseDto>> GetAll();
+    Task<ProductResponseDto?> GetById(Guid id);
+    Task<ICollection<ProductModel>> GetByName(string name);
+    Task<ProductResponseDto?> AddProduct(ProductRequestDto request);
+    Task<ProductResponseDto?> UpdateProduct(Guid id, ProductRequestDto request);
+    Task<bool> DeleteProduct(Guid id);
 }

@@ -1,10 +1,9 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.Product;
 using SimpleStock.Domain.Models;
+using SimpleStock.Exception;
 
 namespace SimpleStock.Application.Services;
 public class ProductService : IProductService
@@ -19,19 +18,84 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<ICollection<ProductModel>> GetByName(
-        [FromBody] string name)
+    public async Task<ICollection<ProductResponseDto>> GetAll()
     {
-        return await _productRepository.GetByName(name);
+        var products = await _productRepository.GetAll();
+        return products
+            .Select(p => _mapper.Map<ProductResponseDto>(p))
+            .OrderBy(p => p.Name)
+            .ToList();
+    }
+
+    public async Task<ProductResponseDto?> GetById(Guid id)
+    {
+        var product = await _productRepository.GetById(id);
+        if (product == null) ThrowNotFound();
+
+        return _mapper.Map<ProductResponseDto>(product);
     }
     
-    public async Task<ProductViewModel?> AddProduct(ProductInputModel input)
+    public async Task<ICollection<ProductModel>> GetByName(string name)
     {
-        var productModel = _mapper.Map<ProductModel>(input);
-        var result = await _productRepository.Add(productModel);
+        var product = await _productRepository.GetByName(name);
+        if (product == null) ThrowNotFound();
 
-        if (!result) return null;
+        return product!;
+    }
 
-        return _mapper.Map<ProductViewModel>(productModel);
+    public async Task<ProductResponseDto?> AddProduct(ProductRequestDto request)
+    {
+        await CheckIfExistsSameName(request.Name);
+
+        var productToPersist = _mapper.Map<ProductModel>(request);
+        await _productRepository.Add(productToPersist);
+
+        var product = _mapper.Map<ProductResponseDto>(productToPersist);
+
+        return product;
+    }
+
+    public async Task<ProductResponseDto?> UpdateProduct(Guid id, ProductRequestDto request)
+    {
+
+        var product = await _productRepository.GetById(id);
+        if (product == null) ThrowNotFound();
+
+        await CheckIfExistsSameName(request.Name);
+
+        _mapper.Map(request, product);
+        await _productRepository.Update(product!);
+
+        var responseProduct = _mapper.Map<ProductResponseDto>(product);
+
+        return responseProduct;
+    }
+
+    public async Task<bool> DeleteProduct(Guid id)
+    {
+        var product = await _productRepository.GetById(id);
+        if (product == null)
+        {
+            var message = "Não há produto cadastrado com o ID informado.";
+            throw new NotFoundException(message);
+        }
+
+        return await _productRepository.Delete(product);
+    }
+
+    private static void ThrowNotFound()
+    {
+        var message = "Não há produto cadastrado com o ID informado.";
+        throw new NotFoundException(message);
+    }
+
+    private async Task CheckIfExistsSameName(string name)
+    {
+        var checkExistsWithName = await _productRepository.GetByName(name);
+        if (checkExistsWithName.Count > 0)
+        {
+            var message = "Já existe um produto com o nome fornecido";
+            throw new AlreadyExistsException(message);
+        }
     }
 }

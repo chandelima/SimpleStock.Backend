@@ -3,7 +3,7 @@ using SimpleStock.Domain.DTOs.Product;
 
 namespace SimpleStock.Application.Validators.Product;
 
-public class ProductCreateValidator : AbstractValidator<ProductInputModel>
+public class ProductCreateValidator : AbstractValidator<ProductRequestDto>
 {
     public ProductCreateValidator()
     {

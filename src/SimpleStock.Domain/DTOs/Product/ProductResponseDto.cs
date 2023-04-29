@@ -1,5 +1,5 @@
 namespace SimpleStock.Domain.DTOs.Product;
-public class ProductViewModel
+public class ProductResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;

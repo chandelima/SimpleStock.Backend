@@ -15,7 +15,6 @@ public class GlobalErrorHandlingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-
         try
         {
             await _next(context);
@@ -29,15 +28,13 @@ public class GlobalErrorHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, System.Exception exception)
     {
-        HttpStatusCode status = HttpStatusCode.BadRequest;
-        string message = string.Empty;
         var exceptionType = exception.GetType();
-
-        if (exceptionType == typeof(BaseException))
-        {
-            message = exception.Message;
-        }
+        if (!exceptionType.IsSubclassOf(typeof(BaseException)))
+            throw exception;
         
+        HttpStatusCode status = HttpStatusCode.BadRequest;
+        string message = exception.Message;
+
         var result = JsonSerializer.Serialize(new { status, message });
 
         context.Response.ContentType = "application/json";

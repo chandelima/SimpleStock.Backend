@@ -13,9 +13,18 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
         _context = context;
     }
 
+    public async Task<ICollection<T>> GetAll()
+    {
+        return await _context.Set<T>()
+            .Where(e => !e.IsDeleted)
+            .ToListAsync();
+    }
+
     public async Task<T?> GetById(Guid id)
     {
-        return await _context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+        return await _context.Set<T>()
+            .Where(e => !e.IsDeleted)
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<bool> Add(T entity)

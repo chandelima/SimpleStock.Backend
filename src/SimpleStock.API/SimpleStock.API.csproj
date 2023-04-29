@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SimpleStock.Application\SimpleStock.Application.csproj" />
     <ProjectReference Include="..\SimpleStock.Data\SimpleStock.Data.csproj" />
+    <ProjectReference Include="..\SimpleStock.Exception\SimpleStock.Exception.csproj" />
   </ItemGroup>
 
 </Project>
