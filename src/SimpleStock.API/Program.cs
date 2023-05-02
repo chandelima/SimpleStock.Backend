@@ -22,7 +22,6 @@ builder.Services.AddDbContext<SimpleStockDataContext>(conf =>
     conf.UseSqlite(connectionString);
 });
 
-
 builder.Services.AddControllers();
 
 builder.Services.AddFluentValidationAutoValidation();
@@ -31,6 +30,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 builder.Services.AddAutoMapper(typeof(ProductProfile));
 

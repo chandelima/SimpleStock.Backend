@@ -4,11 +4,12 @@ using SimpleStock.Domain.Models;
 using SimpleStock.Infrastructure.DataContexts;
 
 namespace SimpleStock.Data.Repositories;
-public class ProductRepository : BaseRepository<ProductModel>, IProductRepository
+
+public class CustomerRepository : BaseRepository<CustomerModel>, ICustomerRepository
 {
     private readonly SimpleStockDataContext _context;
 
-    public ProductRepository(SimpleStockDataContext context) : base(context)
+    public CustomerRepository(SimpleStockDataContext context) : base(context)
     {
         _context = context;
     }
