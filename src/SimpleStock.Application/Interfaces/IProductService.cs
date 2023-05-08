@@ -1,6 +1,5 @@
 using SimpleStock.Domain.DTOs.Product;
 using SimpleStock.Domain.Models;
-using SimpleStock.Exception;
 
 namespace SimpleStock.Application.Interfaces;
 public interface IProductService

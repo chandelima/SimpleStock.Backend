@@ -1,16 +1,15 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using SimpleStock.API.Middlewares;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Application.Profiles;
 using SimpleStock.Application.Services;
-using SimpleStock.Application.Validators.Product;
+using SimpleStock.Application.Validators;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Data.Repositories;
-using SimpleStock.Domain.Models;
 using SimpleStock.Infrastructure.DataContexts;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,12 +21,18 @@ builder.Services.AddDbContext<SimpleStockDataContext>(conf =>
     conf.UseSqlite(connectionString);
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions
+        .ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddressCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CustomerCreateValidator>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();

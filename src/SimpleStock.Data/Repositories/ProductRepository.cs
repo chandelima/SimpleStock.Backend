@@ -16,6 +16,7 @@ public class ProductRepository : BaseRepository<ProductModel>, IProductRepositor
     public async Task<ICollection<ProductModel>> GetByName(string name)
     {
         return await _context.Products
+            .AsNoTracking()
             .Where(p => p.Name.ToLower().Contains(name.ToLower()))
             .OrderBy(e => e.Name)
             .ToListAsync();

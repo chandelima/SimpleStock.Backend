@@ -16,6 +16,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
     public async Task<ICollection<T>> GetAll()
     {
         return await _context.Set<T>()
+            .AsNoTracking()
             .Where(e => !e.IsDeleted)
             .ToListAsync();
     }
@@ -23,6 +24,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
     public async Task<T?> GetById(Guid id)
     {
         return await _context.Set<T>()
+            .AsNoTracking()
             .Where(e => !e.IsDeleted)
             .FirstOrDefaultAsync(e => e.Id == id);
     }

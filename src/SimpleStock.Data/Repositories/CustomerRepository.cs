@@ -14,9 +14,10 @@ public class CustomerRepository : BaseRepository<CustomerModel>, ICustomerReposi
         _context = context;
     }
 
-    public async Task<ICollection<ProductModel>> GetByName(string name)
+    public async Task<ICollection<CustomerModel>> GetByName(string name)
     {
-        return await _context.Products
+        return await _context.Customers
+            .AsNoTracking()
             .Where(p => p.Name.ToLower().Contains(name.ToLower()))
             .OrderBy(e => e.Name)
             .ToListAsync();

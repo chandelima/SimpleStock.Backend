@@ -11,7 +11,5 @@ public class AddressResponseDto
     public string City { get; set; } = null!;
     public string State { get; set; } = null!;
     public string PostalCode { get; set; } = null!;
-    public Guid CustomerId { get; set; }
-    public CustomerModel Customer { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
 }

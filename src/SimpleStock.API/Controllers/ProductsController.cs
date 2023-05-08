@@ -1,18 +1,16 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using SimpleStock.API.Shared;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Domain.DTOs.Product;
 
 namespace SimpleStock.API.Controllers;
-[Route("api/products")]
+[Route("api/[controller]")]
 [ApiController]
-public class ProductController : ControllerBase
+public class ProductsController : ControllerBase
 {
     private readonly IProductService _productService;
 
-    public ProductController(
+    public ProductsController(
         IProductService productService)
     {
         _productService = productService;
@@ -46,7 +44,7 @@ public class ProductController : ControllerBase
     {
         var product = await _productService.UpdateProduct(id, request);
         if (product == null)
-            return BadRequest("Erro ao tentar atualizar produto.");
+            return BadRequest("Erro ao tentar atualizar cliente.");
 
         return Ok(product);
     }
@@ -58,8 +56,8 @@ public class ProductController : ControllerBase
 
         if (!result)
         {
-            var message = new MessageResponse("Não foi possível deletar o produto especificado.");
-            return BadRequest(message);
+            var message = "Não foi possível deletar o cliente especificado.";
+            return BadRequest(new MessageResponse(message));
         }
 
         return NoContent();
