@@ -1,11 +1,12 @@
-namespace SimpleStock.Domain.Models;
-public class CustomerModel : EntityModel
+using SimpleStock.Domain.DTOs.Address;
+
+namespace SimpleStock.Domain.DTOs.Customer;
+public class CustomerRequestDto
 {
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
     public string Cpf { get; set; } = null!;
     public DateOnly BirthDate { get; set; }
-    public ICollection<AddressModel> Addresses { get; set; } = null!;
-    public ICollection<OrderModel> Orders { get; set; } = null!;
+    public ICollection<AddressRequestDto> Addresses { get; set; } = null!;
 }

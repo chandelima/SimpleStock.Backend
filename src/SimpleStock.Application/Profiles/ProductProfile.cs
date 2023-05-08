@@ -8,7 +8,6 @@ public class ProductProfile : Profile
     public ProductProfile()
     {
         CreateMap<ProductRequestDto, ProductModel>();
-        CreateMap<ProductModel, ProductResponseDto>()
-            .IncludeAllDerived();
+        CreateMap<ProductModel, ProductResponseDto>();
     }
 }

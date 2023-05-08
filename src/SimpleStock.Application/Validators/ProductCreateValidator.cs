@@ -1,7 +1,7 @@
 using FluentValidation;
 using SimpleStock.Domain.DTOs.Product;
 
-namespace SimpleStock.Application.Validators.Product;
+namespace SimpleStock.Application.Validators;
 
 public class ProductCreateValidator : AbstractValidator<ProductRequestDto>
 {
@@ -22,7 +22,7 @@ public class ProductCreateValidator : AbstractValidator<ProductRequestDto>
         {
             RuleFor(e => e.Amount).GreaterThan(0.01m).WithMessage("Quantidade deve receber um valor positivo");
         });
-        
+
 
         // Price validation
         RuleFor(e => e.Price).NotEmpty().WithMessage("Preço deve ser preenchido");

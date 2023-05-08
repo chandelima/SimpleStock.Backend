@@ -94,7 +94,7 @@ public class ProductService : IProductService
         var checkExistsWithName = await _productRepository.GetByName(name);
         if (checkExistsWithName.Count > 0)
         {
-            var message = "Já existe um produto com o nome fornecido";
+            var message = "Já existe um ítem de produto com o nome fornecido";
             throw new AlreadyExistsException(message);
         }
     }

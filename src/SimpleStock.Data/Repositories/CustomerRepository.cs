@@ -4,18 +4,19 @@ using SimpleStock.Domain.Models;
 using SimpleStock.Infrastructure.DataContexts;
 
 namespace SimpleStock.Data.Repositories;
-public class ProductRepository : BaseRepository<ProductModel>, IProductRepository
+
+public class CustomerRepository : BaseRepository<CustomerModel>, ICustomerRepository
 {
     private readonly SimpleStockDataContext _context;
 
-    public ProductRepository(SimpleStockDataContext context) : base(context)
+    public CustomerRepository(SimpleStockDataContext context) : base(context)
     {
         _context = context;
     }
 
-    public async Task<ICollection<ProductModel>> GetByName(string name)
+    public async Task<ICollection<CustomerModel>> GetByName(string name)
     {
-        return await _context.Products
+        return await _context.Customers
             .AsNoTracking()
             .Where(p => p.Name.ToLower().Contains(name.ToLower()))
             .OrderBy(e => e.Name)
