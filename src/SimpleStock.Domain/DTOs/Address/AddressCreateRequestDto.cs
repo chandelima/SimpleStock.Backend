@@ -1,5 +1,5 @@
 namespace SimpleStock.Domain.DTOs.Address;
-public class AddressRequestDto
+public class AddressCreateRequestDto
 {
     public string StreetName { get; set; } = null!;
     public string Number { get; set; } = null!;

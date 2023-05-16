@@ -5,7 +5,7 @@ using SimpleStock.Domain.DTOs.Customer;
 
 namespace SimpleStock.Application.Validators;
 
-public class CustomerCreateValidator : AbstractValidator<CustomerRequestDto>
+public class CustomerCreateValidator : AbstractValidator<CustomerCreateRequestDto>
 {
     public CustomerCreateValidator()
     {
@@ -31,7 +31,7 @@ public class CustomerCreateValidator : AbstractValidator<CustomerRequestDto>
         When(e => !string.IsNullOrWhiteSpace(e.PhoneNumber), () =>
         {
             RuleFor(e => e.PhoneNumber).Custom(
-                (phoneNumber, context) => PhoneValidator<CustomerRequestDto>
+                (phoneNumber, context) => PhoneValidator<CustomerCreateRequestDto>
                     .Validate(phoneNumber, context, "Telefone deve ser válido"));
         });
 
@@ -40,7 +40,7 @@ public class CustomerCreateValidator : AbstractValidator<CustomerRequestDto>
         When(e => !string.IsNullOrWhiteSpace(e.Cpf), () =>
         {
             RuleFor(e => e.Cpf).Custom(
-                (phoneNumber, context) => CpfValidator<CustomerRequestDto>
+                (phoneNumber, context) => CpfValidator<CustomerCreateRequestDto>
                     .Validate(phoneNumber, context, "CPF deve ser válido"));
         });
 

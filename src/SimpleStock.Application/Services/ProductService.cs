@@ -91,7 +91,11 @@ public class ProductService : IProductService
 
     private async Task CheckIfExistsSameName(string name)
     {
-        var checkExistsWithName = await _productRepository.GetByName(name);
+        var findExistsWithName = await _productRepository.GetByName(name);
+        var checkExistsWithName = findExistsWithName
+            .Where(p => p.Name == name)
+            .ToList();
+
         if (checkExistsWithName.Count > 0)
         {
             var message = "Já existe um ítem de produto com o nome fornecido";

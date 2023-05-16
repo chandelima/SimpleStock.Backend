@@ -7,7 +7,8 @@ public class CustomerProfile : Profile
 {
     public CustomerProfile()
     {
-        CreateMap<CustomerRequestDto, CustomerModel>();
+        CreateMap<CustomerCreateRequestDto, CustomerModel>();
+        CreateMap<CustomerUpdateRequestDto, CustomerModel>();
         CreateMap<CustomerModel, CustomerResponseDto>()
             .IncludeAllDerived();
     }

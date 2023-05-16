@@ -43,7 +43,7 @@ public class CustomerService : ICustomerService
         return customer!;
     }
 
-    public async Task<CustomerResponseDto?> AddCustomer(CustomerRequestDto request)
+    public async Task<CustomerResponseDto?> AddCustomer(CustomerCreateRequestDto request)
     {
         await CheckIfExistsSameName(request.Name);
 
@@ -55,7 +55,7 @@ public class CustomerService : ICustomerService
         return customer;
     }
 
-    public async Task<CustomerResponseDto?> UpdateCustomer(Guid id, CustomerRequestDto request)
+    public async Task<CustomerResponseDto?> UpdateCustomer(Guid id, CustomerUpdateRequestDto request)
     {
 
         var customer = await _customerRepository.GetById(id);
@@ -64,6 +64,8 @@ public class CustomerService : ICustomerService
         await CheckIfExistsSameName(request.Name);
 
         _mapper.Map(request, customer);
+        customer!.Addresses.ToList().ForEach(a => a.CustomerId = customer.Id);
+
         await _customerRepository.Update(customer!);
 
         var responseCustomer = _mapper.Map<CustomerResponseDto>(customer);
@@ -91,7 +93,11 @@ public class CustomerService : ICustomerService
 
     private async Task CheckIfExistsSameName(string name)
     {
-        var checkExistsWithName = await _customerRepository.GetByName(name);
+        var findExistsWithName = await _customerRepository.GetByName(name);
+        var checkExistsWithName = findExistsWithName
+            .Where(c => c.Name == name)
+            .ToList();
+
         if (checkExistsWithName.Count > 0)
         {
             var message = "Já existe um ítem de cliente com o nome fornecido";
