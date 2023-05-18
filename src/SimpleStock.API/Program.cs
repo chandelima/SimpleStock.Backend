@@ -31,6 +31,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CustomerUpdateValidator>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();

@@ -40,6 +40,7 @@ public class SimpleStockDataContext : DbContext
                     break;
                 case EntityState.Deleted:
                     entry.State = EntityState.Modified;
+                    ((EntityModel)entry.Entity).UpdatedAt = dateTime;
                     ((EntityModel)entry.Entity).IsDeleted = true;
                     break;
             }
