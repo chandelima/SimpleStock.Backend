@@ -8,6 +8,7 @@ using SimpleStock.Application.Services;
 using SimpleStock.Application.Validators;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Data.Repositories;
+using SimpleStock.Domain.Models;
 using SimpleStock.Infrastructure.DataContexts;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SimpleStockDataContext>(conf =>
 {
     var connectionString = builder.Configuration.GetConnectionString("SimpleStock");
-    conf.UseSqlite(connectionString);
+    conf.UseSqlite(connectionString).EnableSensitiveDataLogging();
 });
 
 builder.Services.AddControllers().AddJsonOptions(options => {
@@ -30,6 +31,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CustomerUpdateValidator>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();

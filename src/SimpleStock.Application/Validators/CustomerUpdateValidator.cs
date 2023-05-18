@@ -5,9 +5,9 @@ using SimpleStock.Domain.DTOs.Customer;
 
 namespace SimpleStock.Application.Validators;
 
-public class CustomerCreateValidator : AbstractValidator<CustomerCreateRequestDto>
+public class CustomerUpdateValidator : AbstractValidator<CustomerUpdateRequestDto>
 {
-    public CustomerCreateValidator()
+    public CustomerUpdateValidator()
     {
         // Name validation
         RuleFor(e => e.Name).NotEmpty().WithMessage("Nome deve ser preenchido");
@@ -31,7 +31,7 @@ public class CustomerCreateValidator : AbstractValidator<CustomerCreateRequestDt
         When(e => !string.IsNullOrWhiteSpace(e.PhoneNumber), () =>
         {
             RuleFor(e => e.PhoneNumber).Custom(
-                (phoneNumber, context) => PhoneValidator<CustomerCreateRequestDto>
+                (phoneNumber, context) => PhoneValidator<CustomerUpdateRequestDto>
                     .Validate(phoneNumber, context, "Telefone deve ser válido"));
         });
 
@@ -40,7 +40,7 @@ public class CustomerCreateValidator : AbstractValidator<CustomerCreateRequestDt
         When(e => !string.IsNullOrWhiteSpace(e.Cpf), () =>
         {
             RuleFor(e => e.Cpf).Custom(
-                (phoneNumber, context) => CpfValidator<CustomerCreateRequestDto>
+                (phoneNumber, context) => CpfValidator<CustomerUpdateRequestDto>
                     .Validate(phoneNumber, context, "CPF deve ser válido"));
         });
 
@@ -51,8 +51,5 @@ public class CustomerCreateValidator : AbstractValidator<CustomerCreateRequestDt
             RuleFor(e => e.BirthDate).LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.Now))
                 .WithMessage("Data de nascimento não pode ser superior a data atual");
         });
-
-        //Addresses Validator
-        RuleForEach(e => e.Addresses).SetValidator(new AddressCreateValidator());
     }
 }

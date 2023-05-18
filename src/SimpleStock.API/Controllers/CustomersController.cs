@@ -33,7 +33,7 @@ public class CustomersController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<CustomerResponseDto>> CreateCustomer(
-        [FromBody] CustomerRequestDto request)
+        [FromBody] CustomerCreateRequestDto request)
     {
         var customer = await _customerService.AddCustomer(request);
         return Ok(customer);
@@ -41,7 +41,7 @@ public class CustomersController : ControllerBase
 
     [HttpPut("{id}")]
     public async Task<ActionResult<CustomerResponseDto>> UpdateCustomer(
-        [FromRoute] Guid id, [FromBody] CustomerRequestDto request)
+        [FromRoute] Guid id, [FromBody] CustomerUpdateRequestDto request)
     {
         var customer = await _customerService.UpdateCustomer(id, request);
         if (customer == null)

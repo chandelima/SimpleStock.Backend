@@ -475,3 +475,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/src/SimpleStock.API/SimpleStockDb.db
+/src/SimpleStock.API/SimpleStockDb.db-shm
+/src/SimpleStock.API/SimpleStockDb.db-wal

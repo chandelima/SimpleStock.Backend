@@ -7,7 +7,7 @@ public interface ICustomerService
     Task<ICollection<CustomerResponseDto>> GetAll();
     Task<CustomerResponseDto?> GetById(Guid id);
     Task<ICollection<CustomerModel>> GetByName(string name);
-    Task<CustomerResponseDto?> AddCustomer(CustomerRequestDto request);
-    Task<CustomerResponseDto?> UpdateCustomer(Guid id, CustomerRequestDto request);
+    Task<CustomerResponseDto?> AddCustomer(CustomerCreateRequestDto request);
+    Task<CustomerResponseDto?> UpdateCustomer(Guid id, CustomerUpdateRequestDto request);
     Task<bool> DeleteCustomer(Guid id);
 }

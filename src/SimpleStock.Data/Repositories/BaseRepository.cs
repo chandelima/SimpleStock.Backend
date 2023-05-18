@@ -21,7 +21,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
             .ToListAsync();
     }
 
-    public async Task<T?> GetById(Guid id)
+    public virtual async Task<T?> GetById(Guid id)
     {
         return await _context.Set<T>()
             .AsNoTracking()
@@ -35,7 +35,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
         return await SaveChangesAsync();
     }
 
-    public async Task<bool> Update(T entity)
+    public virtual async Task<bool> Update(T entity)
     {
         _context.Set<T>().Update(entity);
         return await SaveChangesAsync();
@@ -53,7 +53,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
         return await SaveChangesAsync();
     }
 
-    private async Task<bool> SaveChangesAsync()
+    public async Task<bool> SaveChangesAsync()
     {
         return (await _context.SaveChangesAsync()) > 0;
     }
