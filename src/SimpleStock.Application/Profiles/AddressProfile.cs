@@ -7,8 +7,7 @@ public class AddressProfile : Profile
 {
     public AddressProfile()
     {
-        CreateMap<AddressCreateRequestDto, AddressModel>();
-        CreateMap<AddressUpdateRequestDto, AddressModel>();
+        CreateMap<AddressRequestDto, AddressModel>();
         CreateMap<AddressModel, AddressResponseDto>();
     }
 }

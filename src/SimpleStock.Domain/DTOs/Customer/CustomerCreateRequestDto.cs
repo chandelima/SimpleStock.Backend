@@ -8,5 +8,5 @@ public class CustomerCreateRequestDto
     public string PhoneNumber { get; set; } = null!;
     public string Cpf { get; set; } = null!;
     public DateOnly BirthDate { get; set; }
-    public ICollection<AddressCreateRequestDto> Addresses { get; set; } = null!;
+    public ICollection<AddressRequestDto> Addresses { get; set; } = null!;
 }

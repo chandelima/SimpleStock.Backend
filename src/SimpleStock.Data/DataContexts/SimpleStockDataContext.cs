@@ -12,8 +12,8 @@ public class SimpleStockDataContext : DbContext
     public DbSet<AddressModel> Adressess { get; set; }
     public DbSet<CustomerModel> Customers { get; set; }
     public DbSet<ProductModel> Products { get; set; }
-    public DbSet<OrderItemModel> SaleItems { get; set; }
-    public DbSet<OrderModel> Sales { get; set; }
+    public DbSet<OrderModel> Orders { get; set; }
+    public DbSet<OrderItemModel> OrdersItems { get; set; }
 
     public override Task<int> SaveChangesAsync(
             bool acceptAllChangesOnSuccess,

@@ -6,8 +6,8 @@ public class OrderItemModel : EntityModel
     public decimal Amount { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get => GetTotalPrice(); }
-    public Guid SaleId { get; set; }
-    public OrderModel Sale { get; set; } = null!;
+    public Guid OrderId { get; set; }
+    public OrderModel Order { get; set; } = null!;
 
     private decimal GetTotalPrice() => Amount * UnitPrice;
 }

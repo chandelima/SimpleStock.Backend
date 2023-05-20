@@ -35,9 +35,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<CustomerUpdateValidator>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 builder.Services.AddAutoMapper(typeof(ProductProfile));
 

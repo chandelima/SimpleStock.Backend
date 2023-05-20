@@ -4,7 +4,7 @@ using SimpleStock.Domain.DTOs.Address;
 using SimpleStock.Domain.DTOs.Customer;
 
 namespace SimpleStock.Application.Validators;
-public class AddressCreateValidator : AbstractValidator<AddressCreateRequestDto>
+public class AddressCreateValidator : AbstractValidator<AddressRequestDto>
 {
     public AddressCreateValidator()
     {
@@ -57,7 +57,7 @@ public class AddressCreateValidator : AbstractValidator<AddressCreateRequestDto>
         When(e => !string.IsNullOrWhiteSpace(e.PostalCode), () =>
         {
             RuleFor(e => e.PostalCode).Custom(
-                (phoneNumber, context) => PostalCodeValidator<AddressCreateRequestDto>
+                (phoneNumber, context) => PostalCodeValidator<AddressRequestDto>
                     .Validate(phoneNumber, context, "CEP deve estar no formato \"00000-000\""));
         });
     }

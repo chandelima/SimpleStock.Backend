@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleStock.Infrastructure.DataContexts;
 
@@ -10,9 +11,11 @@ using SimpleStock.Infrastructure.DataContexts;
 namespace SimpleStock.Data.Migrations
 {
     [DbContext(typeof(SimpleStockDataContext))]
-    partial class SimpleStockDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230520120259_OrderFeature")]
+    partial class OrderFeature
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
@@ -123,10 +126,10 @@ namespace SimpleStock.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("OrderId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("SaleId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("UnitPrice")
@@ -137,9 +140,9 @@ namespace SimpleStock.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
-
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SaleId");
 
                     b.ToTable("OrdersItems");
                 });
@@ -218,21 +221,21 @@ namespace SimpleStock.Data.Migrations
 
             modelBuilder.Entity("SimpleStock.Domain.Models.OrderItemModel", b =>
                 {
-                    b.HasOne("SimpleStock.Domain.Models.OrderModel", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SimpleStock.Domain.Models.ProductModel", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.HasOne("SimpleStock.Domain.Models.OrderModel", "Sale")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("Sale");
                 });
 
             modelBuilder.Entity("SimpleStock.Domain.Models.OrderModel", b =>

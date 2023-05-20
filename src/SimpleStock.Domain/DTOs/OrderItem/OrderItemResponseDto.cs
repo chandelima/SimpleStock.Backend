@@ -9,7 +9,7 @@ public class OrderItemResponseDto
     public decimal Amount { get; set; }
     public decimal UnitPrice { get; set; }
     public decimal TotalPrice { get; set; }
-    public Guid SaleId { get; set; }
-    public OrderModel Sale { get; set; } = null!;
+    public Guid OrderId { get; set; }
+    public OrderModel Order { get; set; } = null!;
     public DateTimeOffset CreatedAt { get; set; }
 }
