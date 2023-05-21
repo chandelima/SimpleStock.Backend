@@ -10,12 +10,16 @@ using SimpleStock.Exception;
 namespace SimpleStock.Application.Services;
 public class OrderService : IOrderService
 {
+    private readonly IOrderItemService _orderItemService;
     private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
     public OrderService(
-        IOrderRepository orderRepository, IMapper mapper)
+        IOrderItemService orderItemService,
+        IOrderRepository orderRepository,
+        IMapper mapper)
     {
+        _orderItemService = orderItemService;
         _orderRepository = orderRepository;
         _mapper = mapper;
     }
@@ -38,10 +42,11 @@ public class OrderService : IOrderService
 
     public async Task<OrderResponseDto?> AddOrder(OrderRequestDto request)
     {
-        CheckHasDuplicatedOrderItems(request.OrderItems);
+        _orderItemService.CheckHasDuplicatedOrderItems(request.OrderItems);
         
         var orderToPersist = _mapper.Map<OrderModel>(request);
         orderToPersist.OrderStatus = EOrderStatus.Pending;
+        orderToPersist.OrderItems = _orderItemService.ProcessOrderItemsPrices(request.OrderItems);
 
         await _orderRepository.Add(orderToPersist);
 
@@ -80,18 +85,5 @@ public class OrderService : IOrderService
     {
         var message = "Não há venda cadastrada com o ID informado.";
         throw new NotFoundException(message);
-    }
-
-    private void CheckHasDuplicatedOrderItems(ICollection<OrderItemRequestDto> items)
-    {
-        var duplicatedItems = items.GroupBy(i => i.ProductId)
-                                   .Where(i => i.Count() > 1)
-                                   .Select(g => g.Key);
-
-        if (duplicatedItems.Any())
-        {
-            var message = "Há itens de vendas duplicados na listagem de produtos.";
-            throw new DuplicatedItemException(message);
-        }
     }
 }
