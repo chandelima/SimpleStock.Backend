@@ -30,7 +30,7 @@ public class ProductService : IProductService
     public async Task<ProductResponseDto?> GetById(Guid id)
     {
         var product = await _productRepository.GetById(id);
-        if (product == null) ThrowNotFound();
+        if (product == null) ThrowNotFound(id);
 
         return _mapper.Map<ProductResponseDto>(product);
     }
@@ -59,7 +59,7 @@ public class ProductService : IProductService
     {
 
         var product = await _productRepository.GetById(id);
-        if (product == null) ThrowNotFound();
+        if (product == null) ThrowNotFound(id);
 
         await CheckIfExistsSameName(request.Name);
 
@@ -74,18 +74,17 @@ public class ProductService : IProductService
     public async Task<bool> DeleteProduct(Guid id)
     {
         var product = await _productRepository.GetById(id);
-        if (product == null)
-        {
-            var message = "Não há produto cadastrado com o ID informado.";
-            throw new NotFoundException(message);
-        }
+        if (product == null) ThrowNotFound(id);
 
-        return await _productRepository.Delete(product);
+        return await _productRepository.Delete(product!);
     }
 
-    private static void ThrowNotFound()
+    private static void ThrowNotFound(Guid? id = null)
     {
-        var message = "Não há produto cadastrado com o ID informado.";
+        var message = "Nenhum produto encontrado com os dados informados.";
+        if (id != null) 
+            message = $"Nenhum produto encontrado com o Id {id.ToString()}";
+
         throw new NotFoundException(message);
     }
 

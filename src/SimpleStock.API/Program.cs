@@ -33,6 +33,8 @@ builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerUpdateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderItemCreateValidator>();
 
 // ToDo: Refactor DI using extension methods
 builder.Services.AddScoped<ICustomerService, CustomerService>();

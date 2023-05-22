@@ -88,18 +88,18 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public ICollection<OrderItemModel> ProcessOrderItemsPrices(ICollection<OrderItemRequestDto> items)
+    public async Task<ICollection<OrderItemModel>> ProcessOrderItemsPrices(ICollection<OrderItemRequestDto> items)
     {
         ICollection<OrderItemModel> orderItems = new List<OrderItemModel>();
 
-        items.ToList().ForEach(async i =>
+        foreach (var item in items)
         {
-            var product = await _productService.GetById(i.ProductId);
-            var orderItem = _mapper.Map<OrderItemModel>(i);
+            var product = await _productService.GetById(item.ProductId);
+            var orderItem = _mapper.Map<OrderItemModel>(item);
             orderItem.UnitPrice = product!.Price;
 
             orderItems.Add(orderItem);
-        });
+        }
 
         return orderItems;
     }

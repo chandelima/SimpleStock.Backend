@@ -10,15 +10,18 @@ using SimpleStock.Exception;
 namespace SimpleStock.Application.Services;
 public class OrderService : IOrderService
 {
+    private readonly ICustomerService _customerService;
     private readonly IOrderItemService _orderItemService;
     private readonly IOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
     public OrderService(
+        ICustomerService customerService,
         IOrderItemService orderItemService,
         IOrderRepository orderRepository,
         IMapper mapper)
     {
+        _customerService = customerService;
         _orderItemService = orderItemService;
         _orderRepository = orderRepository;
         _mapper = mapper;
@@ -45,8 +48,10 @@ public class OrderService : IOrderService
         _orderItemService.CheckHasDuplicatedOrderItems(request.OrderItems);
         
         var orderToPersist = _mapper.Map<OrderModel>(request);
+
+        await _customerService.GetById(orderToPersist.CustomerId);
+        orderToPersist.OrderItems = await _orderItemService.ProcessOrderItemsPrices(request.OrderItems);
         orderToPersist.OrderStatus = EOrderStatus.Pending;
-        orderToPersist.OrderItems = _orderItemService.ProcessOrderItemsPrices(request.OrderItems);
 
         await _orderRepository.Add(orderToPersist);
 
