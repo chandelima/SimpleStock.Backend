@@ -10,5 +10,6 @@ public interface IOrderItemService
     Task<OrderItemResponseDto?> UpdateOrderItem(Guid id, OrderItemRequestDto request);
     Task<bool> DeleteOrderItem(Guid id);
     void CheckHasDuplicatedOrderItems(ICollection<OrderItemRequestDto> items);
-    Task<ICollection<OrderItemModel>> ProcessOrderItemsPrices(ICollection<OrderItemRequestDto> items);
+    Task<ICollection<OrderItemModel>> SetOrderItemsPrices(ICollection<OrderItemRequestDto> items);
+    Task CheckOrderItemsHasStock(ICollection<OrderItemRequestDto> items);
 }

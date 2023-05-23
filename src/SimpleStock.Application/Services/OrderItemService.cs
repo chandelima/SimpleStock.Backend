@@ -4,6 +4,7 @@ using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.OrderItem;
 using SimpleStock.Domain.Models;
 using SimpleStock.Exception;
+using System.Reflection;
 
 namespace SimpleStock.Application.Services;
 public class OrderItemService : IOrderItemService
@@ -88,7 +89,22 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task<ICollection<OrderItemModel>> ProcessOrderItemsPrices(ICollection<OrderItemRequestDto> items)
+    public async Task CheckOrderItemsHasStock(ICollection<OrderItemRequestDto> items)
+    {
+        foreach (var item in items)
+        {
+            var product = await _productService.GetById(item.ProductId);
+            if (item.Amount > product!.Amount)
+            {
+                var message = $"A quantidade em estoque do ítem {product.Name}" +
+                              $" (ID: {product.Id}) é insuficiente";
+                throw new NotAllowedException(message);
+            }
+        }
+    }
+    
+    public async Task<ICollection<OrderItemModel>> SetOrderItemsPrices(
+        ICollection<OrderItemRequestDto> items)
     {
         ICollection<OrderItemModel> orderItems = new List<OrderItemModel>();
 
@@ -102,6 +118,15 @@ public class OrderItemService : IOrderItemService
         }
 
         return orderItems;
+    }
+
+    public async Task DecreaseOrdemItemsStock(
+        ICollection<OrderItemRequestDto> items)
+    {
+        foreach (var item in items)
+        {
+            //Continue from  here!
+        }
     }
 
     private static void ThrowNotFound()

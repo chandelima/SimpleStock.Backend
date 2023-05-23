@@ -27,7 +27,7 @@ public class ProductService : IProductService
             .ToList();
     }
 
-    public async Task<ProductResponseDto?> GetById(Guid id)
+    public async Task<ProductResponseDto> GetById(Guid id)
     {
         var product = await _productRepository.GetById(id);
         if (product == null) ThrowNotFound(id);
@@ -77,6 +77,24 @@ public class ProductService : IProductService
         if (product == null) ThrowNotFound(id);
 
         return await _productRepository.Delete(product!);
+    }
+
+    public async Task IncreaseStockAmount(Guid productId, decimal amount)
+    {
+        var product = await _productRepository.GetById(productId);
+        if (product == null) ThrowNotFound(productId);
+
+        product!.Amount += amount;
+        await _productRepository.Update(product);
+    }
+
+    public async Task DecreaseStockAmount(Guid productId, decimal amount)
+    {
+        var product = await _productRepository.GetById(productId);
+        if (product == null) ThrowNotFound(productId);
+
+        product!.Amount -= amount;
+        await _productRepository.Update(product);
     }
 
     private static void ThrowNotFound(Guid? id = null)

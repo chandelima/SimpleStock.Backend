@@ -23,6 +23,7 @@ builder.Services.AddDbContext<SimpleStockDataContext>(conf =>
 });
 
 builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     options.JsonSerializerOptions
         .ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });

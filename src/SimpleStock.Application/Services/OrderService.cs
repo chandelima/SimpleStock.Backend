@@ -2,7 +2,6 @@ using AutoMapper;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.Order;
-using SimpleStock.Domain.DTOs.OrderItem;
 using SimpleStock.Domain.Enums;
 using SimpleStock.Domain.Models;
 using SimpleStock.Exception;
@@ -35,7 +34,7 @@ public class OrderService : IOrderService
             .ToList();
     }
 
-    public async Task<OrderResponseDto?> GetById(Guid id)
+    public async Task<OrderResponseDto> GetById(Guid id)
     {
         var order = await _orderRepository.GetById(id);
         if (order == null) ThrowNotFound();
@@ -46,11 +45,13 @@ public class OrderService : IOrderService
     public async Task<OrderResponseDto?> AddOrder(OrderRequestDto request)
     {
         _orderItemService.CheckHasDuplicatedOrderItems(request.OrderItems);
+        await _orderItemService.CheckOrderItemsHasStock(request.OrderItems);
         
         var orderToPersist = _mapper.Map<OrderModel>(request);
 
         await _customerService.GetById(orderToPersist.CustomerId);
-        orderToPersist.OrderItems = await _orderItemService.ProcessOrderItemsPrices(request.OrderItems);
+        orderToPersist.OrderItems = await _orderItemService
+            .SetOrderItemsPrices(request.OrderItems);
         orderToPersist.OrderStatus = EOrderStatus.Pending;
 
         await _orderRepository.Add(orderToPersist);
