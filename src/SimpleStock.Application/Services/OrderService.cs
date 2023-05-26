@@ -42,17 +42,14 @@ public class OrderService : IOrderService
         return _mapper.Map<OrderResponseDto>(order);
     }
 
-    public async Task<OrderResponseDto?> AddOrder(OrderRequestDto request)
+    public async Task<OrderResponseDto?> AddOrder(OrderCreateDto request)
     {
-        _orderItemService.CheckHasDuplicatedOrderItems(request.OrderItems);
-        await _orderItemService.CheckOrderItemsHasStock(request.OrderItems);
-        
-        var orderToPersist = _mapper.Map<OrderModel>(request);
+        await _customerService.GetById(request.CustomerId);
 
-        await _customerService.GetById(orderToPersist.CustomerId);
-        orderToPersist.OrderItems = await _orderItemService
-            .SetOrderItemsPrices(request.OrderItems);
+        var orderToPersist = _mapper.Map<OrderModel>(request);
         orderToPersist.OrderStatus = EOrderStatus.Pending;
+        orderToPersist.OrderItems = await _orderItemService
+            .ProcessCreateOrderItems(request.OrderItems);
 
         await _orderRepository.Add(orderToPersist);
 
@@ -61,10 +58,25 @@ public class OrderService : IOrderService
         return order;
     }
 
-    public async Task<OrderResponseDto?> UpdateOrder(Guid id, OrderRequestDto request)
+    public async Task<OrderResponseDto?> UpdateOrder(Guid id, OrderCreateDto request)
     {
         var order = await _orderRepository.GetById(id);
         if (order == null) ThrowNotFound();
+        if (order!.OrderStatus != EOrderStatus.Pending)
+        {
+            var message = "O status da operação de venda não permite alteração";
+            throw new NotAllowedException(message);
+        }
+
+        // Verifica se o cliente existe
+        await _customerService.GetById(request.CustomerId);
+
+        // Processa a alteração de venda
+
+        // retorna a venda para o cliente
+
+
+
 
         _mapper.Map(request, order);
 
@@ -73,18 +85,34 @@ public class OrderService : IOrderService
         var responseOrder = _mapper.Map<OrderResponseDto>(order);
 
         return responseOrder;
+
+
+        //create flow
+
+
+        var orderToPersist = _mapper.Map<OrderModel>(request);
+        orderToPersist.OrderStatus = EOrderStatus.Pending;
+        orderToPersist.OrderItems = await _orderItemService
+            .ProcessCreateOrderItems(request.OrderItems);
+
+        await _orderRepository.Add(orderToPersist);
+
+        var order = _mapper.Map<OrderResponseDto>(orderToPersist);
+
+        return order;
     }
 
     public async Task<bool> DeleteOrder(Guid id)
     {
         var order = await _orderRepository.GetById(id);
-        if (order == null)
+        if (order == null) ThrowNotFound();
+        if (order!.OrderStatus != EOrderStatus.Pending)
         {
-            var message = "Não há venda cadastrada com o ID informado.";
-            throw new NotFoundException(message);
+            var message = "O status da operação de venda não permite alteração";
+            throw new NotAllowedException(message);
         }
 
-        return await _orderRepository.Delete(order);
+        return await _orderRepository.Delete(order!);
     }
 
     private static void ThrowNotFound()

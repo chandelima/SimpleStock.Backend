@@ -1,11 +1,9 @@
 using FluentValidation;
-using SimpleStock.Application.Validators.CustomValidators;
-using SimpleStock.Application.Validators.Shared;
 using SimpleStock.Domain.DTOs.Order;
 
 namespace SimpleStock.Application.Validators;
 
-public class OrderCreateValidator : AbstractValidator<OrderRequestDto>
+public class OrderCreateValidator : AbstractValidator<OrderCreateDto>
 {
     public OrderCreateValidator()
     {

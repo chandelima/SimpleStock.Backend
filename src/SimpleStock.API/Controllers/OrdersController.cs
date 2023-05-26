@@ -33,7 +33,7 @@ public class OrdersController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<OrderResponseDto>> CreateOrder(
-        [FromBody] OrderRequestDto request)
+        [FromBody] OrderCreateDto request)
     {
         var order = await _orderService.AddOrder(request);
         return Ok(order);
@@ -41,7 +41,7 @@ public class OrdersController : ControllerBase
 
     [HttpPut("{id}")]
     public async Task<ActionResult<OrderResponseDto>> UpdateOrder(
-        [FromRoute] Guid id, [FromBody] OrderRequestDto request)
+        [FromRoute] Guid id, [FromBody] OrderCreateDto request)
     {
         var order = await _orderService.UpdateOrder(id, request);
         if (order == null)

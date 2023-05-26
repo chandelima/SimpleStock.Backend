@@ -6,5 +6,6 @@ namespace SimpleStock.Domain.Enums;
 public enum EOrderStatus
 {
     Pending,
-    Billed        
+    Billed,
+    Cancelled
 }

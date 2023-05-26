@@ -4,7 +4,6 @@ using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.OrderItem;
 using SimpleStock.Domain.Models;
 using SimpleStock.Exception;
-using System.Reflection;
 
 namespace SimpleStock.Application.Services;
 public class OrderItemService : IOrderItemService
@@ -39,7 +38,7 @@ public class OrderItemService : IOrderItemService
         return _mapper.Map<OrderItemResponseDto>(orderItem);
     }
 
-    public async Task<OrderItemResponseDto?> AddOrderItem(OrderItemRequestDto request)
+    public async Task<OrderItemResponseDto?> AddOrderItem(OrderItemCreateDto request)
     {        
         var orderItemToPersist = _mapper.Map<OrderItemModel>(request);
 
@@ -50,7 +49,7 @@ public class OrderItemService : IOrderItemService
         return orderItem;
     }
 
-    public async Task<OrderItemResponseDto?> UpdateOrderItem(Guid id, OrderItemRequestDto request)
+    public async Task<OrderItemResponseDto?> UpdateOrderItem(Guid id, OrderItemCreateDto request)
     {
         var orderItem = await _orderItemRepository.GetById(id);
         if (orderItem == null) ThrowNotFound();
@@ -76,7 +75,7 @@ public class OrderItemService : IOrderItemService
         return await _orderItemRepository.Delete(orderItem);
     }
 
-    public void CheckHasDuplicatedOrderItems(ICollection<OrderItemRequestDto> items)
+    private void CheckHasDuplicatedOrderItems(ICollection<OrderItemCreateDto> items)
     {
         var duplicatedItems = items.GroupBy(i => i.ProductId)
                                    .Where(i => i.Count() > 1)
@@ -89,7 +88,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task CheckOrderItemsHasStock(ICollection<OrderItemRequestDto> items)
+    private async Task CheckOrderItemsHasStock(ICollection<OrderItemCreateDto> items)
     {
         foreach (var item in items)
         {
@@ -103,8 +102,8 @@ public class OrderItemService : IOrderItemService
         }
     }
     
-    public async Task<ICollection<OrderItemModel>> SetOrderItemsPrices(
-        ICollection<OrderItemRequestDto> items)
+    private async Task<ICollection<OrderItemModel>> SetOrderItemsPrices(
+        ICollection<OrderItemCreateDto> items)
     {
         ICollection<OrderItemModel> orderItems = new List<OrderItemModel>();
 
@@ -120,13 +119,25 @@ public class OrderItemService : IOrderItemService
         return orderItems;
     }
 
-    public async Task DecreaseOrdemItemsStock(
-        ICollection<OrderItemRequestDto> items)
+    private async Task DecreaseOrdemItemsStock(
+        ICollection<OrderItemCreateDto> items)
     {
         foreach (var item in items)
         {
-            //Continue from  here!
+            await _productService
+                .DecreaseStockAmount(item.ProductId, item.Amount);
         }
+    }
+
+    public async Task<ICollection<OrderItemModel>> ProcessCreateOrderItems(
+        ICollection<OrderItemCreateDto> items)
+    {
+        CheckHasDuplicatedOrderItems(items);
+        await CheckOrderItemsHasStock(items);
+
+        var orderItems = await SetOrderItemsPrices(items);
+
+        return orderItems;
     }
 
     private static void ThrowNotFound()

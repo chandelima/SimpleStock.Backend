@@ -7,7 +7,7 @@ public class OrderItemProfile : Profile
 {
     public OrderItemProfile()
     {
-        CreateMap<OrderItemRequestDto, OrderItemModel>();
+        CreateMap<OrderItemCreateDto, OrderItemModel>();
         CreateMap<OrderItemModel, OrderItemResponseDto>();
     }
 }
