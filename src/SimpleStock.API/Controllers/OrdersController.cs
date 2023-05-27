@@ -41,7 +41,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPost("{id}")]
-    public async Task<ActionResult> ProcessOrder(
+    public async Task ProcessOrder(
         [FromRoute] Guid id)
     {
         //Continue from here.
