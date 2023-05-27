@@ -1,5 +1,5 @@
 namespace SimpleStock.Domain.DTOs.OrderItem;
-public class OrderItemUpdateDto
+public class OrderItemRequestDto
 {
     public Guid? Id { get; set; }
     public Guid ProductId { get; set; }

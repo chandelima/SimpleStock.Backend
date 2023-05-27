@@ -6,7 +6,7 @@ public interface IOrderService
 {
     Task<ICollection<OrderResponseDto>> GetAll();
     Task<OrderResponseDto> GetById(Guid id);
-    Task<OrderResponseDto?> AddOrder(OrderCreateDto request);
-    Task<OrderResponseDto?> UpdateOrder(Guid id, OrderCreateDto request);
+    Task<OrderResponseDto?> AddOrder(OrderRequestDto request);
+    Task<OrderResponseDto?> UpdateOrder(Guid id, OrderRequestDto request);
     Task<bool> DeleteOrder(Guid id);
 }

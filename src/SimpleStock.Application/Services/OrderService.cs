@@ -42,14 +42,14 @@ public class OrderService : IOrderService
         return _mapper.Map<OrderResponseDto>(order);
     }
 
-    public async Task<OrderResponseDto?> AddOrder(OrderCreateDto request)
+    public async Task<OrderResponseDto?> AddOrder(OrderRequestDto request)
     {
         await _customerService.GetById(request.CustomerId);
 
         var orderToPersist = _mapper.Map<OrderModel>(request);
         orderToPersist.OrderStatus = EOrderStatus.Pending;
         orderToPersist.OrderItems = await _orderItemService
-            .ProcessCreateOrderItems(request.OrderItems);
+            .ProcessOrderItems(request.OrderItems);
 
         await _orderRepository.Add(orderToPersist);
 
@@ -58,7 +58,7 @@ public class OrderService : IOrderService
         return order;
     }
 
-    public async Task<OrderResponseDto?> UpdateOrder(Guid id, OrderCreateDto request)
+    public async Task<OrderResponseDto?> UpdateOrder(Guid id,OrderRequestDto request)
     {
         var order = await _orderRepository.GetById(id);
         if (order == null) ThrowNotFound();
@@ -68,38 +68,16 @@ public class OrderService : IOrderService
             throw new NotAllowedException(message);
         }
 
-        // Verifica se o cliente existe
         await _customerService.GetById(request.CustomerId);
 
-        // Processa a alteração de venda
-
-        // retorna a venda para o cliente
-
-
-
-
         _mapper.Map(request, order);
+        order.OrderItems = await _orderItemService.ProcessOrderItems(request.OrderItems);
 
         await _orderRepository.Update(order!);
 
         var responseOrder = _mapper.Map<OrderResponseDto>(order);
 
         return responseOrder;
-
-
-        //create flow
-
-
-        var orderToPersist = _mapper.Map<OrderModel>(request);
-        orderToPersist.OrderStatus = EOrderStatus.Pending;
-        orderToPersist.OrderItems = await _orderItemService
-            .ProcessCreateOrderItems(request.OrderItems);
-
-        await _orderRepository.Add(orderToPersist);
-
-        var order = _mapper.Map<OrderResponseDto>(orderToPersist);
-
-        return order;
     }
 
     public async Task<bool> DeleteOrder(Guid id)

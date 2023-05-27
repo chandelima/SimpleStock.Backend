@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleStock.API.Shared;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Domain.DTOs.Order;
+using SimpleStock.Domain.DTOs.OrderItem;
 
 namespace SimpleStock.API.Controllers;
 [Route("api/[controller]")]
@@ -33,15 +34,22 @@ public class OrdersController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<OrderResponseDto>> CreateOrder(
-        [FromBody] OrderCreateDto request)
+        [FromBody] OrderRequestDto request)
     {
         var order = await _orderService.AddOrder(request);
         return Ok(order);
     }
 
+    [HttpPost("{id}")]
+    public async Task<ActionResult> ProcessOrder(
+        [FromRoute] Guid id)
+    {
+        //Continue from here.
+    }
+
     [HttpPut("{id}")]
     public async Task<ActionResult<OrderResponseDto>> UpdateOrder(
-        [FromRoute] Guid id, [FromBody] OrderCreateDto request)
+        [FromRoute] Guid id, [FromBody] OrderRequestDto request)
     {
         var order = await _orderService.UpdateOrder(id, request);
         if (order == null)

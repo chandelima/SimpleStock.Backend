@@ -2,6 +2,7 @@ using AutoMapper;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.Customer;
+using SimpleStock.Domain.DTOs.Order;
 using SimpleStock.Domain.Models;
 using SimpleStock.Exception;
 
@@ -85,7 +86,6 @@ public class CustomerService : ICustomerService
         return await _customerRepository.Delete(customer);
     }
 
-    //ToDo: Tratar exceção para caso sem ID e printando ID
     private static void ThrowNotFound()
     {
         var message = "Não há cliente cadastrado com o ID informado.";

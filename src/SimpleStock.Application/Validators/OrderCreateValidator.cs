@@ -3,7 +3,7 @@ using SimpleStock.Domain.DTOs.Order;
 
 namespace SimpleStock.Application.Validators;
 
-public class OrderCreateValidator : AbstractValidator<OrderCreateDto>
+public class OrderCreateValidator : AbstractValidator<OrderRequestDto>
 {
     public OrderCreateValidator()
     {

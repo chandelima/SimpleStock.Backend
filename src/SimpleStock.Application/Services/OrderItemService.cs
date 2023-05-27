@@ -38,7 +38,7 @@ public class OrderItemService : IOrderItemService
         return _mapper.Map<OrderItemResponseDto>(orderItem);
     }
 
-    public async Task<OrderItemResponseDto?> AddOrderItem(OrderItemCreateDto request)
+    public async Task<OrderItemResponseDto?> AddOrderItem(OrderItemRequestDto request)
     {        
         var orderItemToPersist = _mapper.Map<OrderItemModel>(request);
 
@@ -49,7 +49,7 @@ public class OrderItemService : IOrderItemService
         return orderItem;
     }
 
-    public async Task<OrderItemResponseDto?> UpdateOrderItem(Guid id, OrderItemCreateDto request)
+    public async Task<OrderItemResponseDto?> UpdateOrderItem(Guid id, OrderItemRequestDto request)
     {
         var orderItem = await _orderItemRepository.GetById(id);
         if (orderItem == null) ThrowNotFound();
@@ -75,7 +75,7 @@ public class OrderItemService : IOrderItemService
         return await _orderItemRepository.Delete(orderItem);
     }
 
-    private void CheckHasDuplicatedOrderItems(ICollection<OrderItemCreateDto> items)
+    private void CheckHasDuplicatedOrderItems(ICollection<OrderItemRequestDto> items)
     {
         var duplicatedItems = items.GroupBy(i => i.ProductId)
                                    .Where(i => i.Count() > 1)
@@ -88,7 +88,7 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    private async Task CheckOrderItemsHasStock(ICollection<OrderItemCreateDto> items)
+    private async Task CheckOrderItemsHasStock(ICollection<OrderItemRequestDto> items)
     {
         foreach (var item in items)
         {
@@ -103,7 +103,7 @@ public class OrderItemService : IOrderItemService
     }
     
     private async Task<ICollection<OrderItemModel>> SetOrderItemsPrices(
-        ICollection<OrderItemCreateDto> items)
+        ICollection<OrderItemRequestDto> items)
     {
         ICollection<OrderItemModel> orderItems = new List<OrderItemModel>();
 
@@ -120,7 +120,7 @@ public class OrderItemService : IOrderItemService
     }
 
     private async Task DecreaseOrdemItemsStock(
-        ICollection<OrderItemCreateDto> items)
+        ICollection<OrderItemRequestDto> items)
     {
         foreach (var item in items)
         {
@@ -129,8 +129,8 @@ public class OrderItemService : IOrderItemService
         }
     }
 
-    public async Task<ICollection<OrderItemModel>> ProcessCreateOrderItems(
-        ICollection<OrderItemCreateDto> items)
+    public async Task<ICollection<OrderItemModel>> ProcessOrderItems(
+        ICollection<OrderItemRequestDto> items)
     {
         CheckHasDuplicatedOrderItems(items);
         await CheckOrderItemsHasStock(items);
