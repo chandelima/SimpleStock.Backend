@@ -13,7 +13,7 @@ public abstract class BaseRepository<T> : IBaseRepository<T> where T : EntityMod
         _context = context;
     }
 
-    public async Task<ICollection<T>> GetAll()
+    public virtual async Task<ICollection<T>> GetAll()
     {
         return await _context.Set<T>()
             .AsNoTracking()

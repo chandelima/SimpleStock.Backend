@@ -23,22 +23,36 @@ builder.Services.AddDbContext<SimpleStockDataContext>(conf =>
 });
 
 builder.Services.AddControllers().AddJsonOptions(options => {
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     options.JsonSerializerOptions
         .ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
+// ToDo: Refactor validations invokings using extension methods
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddressCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerCreateValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<CustomerUpdateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderCreateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<OrderItemCreateValidator>();
 
-builder.Services.AddScoped<IProductService, ProductService>();
+// ToDo: Refactor DI using extension methods
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
+// ToDo: Refactor auto mapper invokings using extension methods
+builder.Services.AddAutoMapper(typeof(AddressProfile));
+builder.Services.AddAutoMapper(typeof(CustomerProfile));
+builder.Services.AddAutoMapper(typeof(OrderProfile));
+builder.Services.AddAutoMapper(typeof(OrderItemProfile));
 builder.Services.AddAutoMapper(typeof(ProductProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

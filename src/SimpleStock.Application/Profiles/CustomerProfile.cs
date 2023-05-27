@@ -9,7 +9,6 @@ public class CustomerProfile : Profile
     {
         CreateMap<CustomerCreateRequestDto, CustomerModel>();
         CreateMap<CustomerUpdateRequestDto, CustomerModel>();
-        CreateMap<CustomerModel, CustomerResponseDto>()
-            .IncludeAllDerived();
+        CreateMap<CustomerModel, CustomerResponseDto>();
     }
 }

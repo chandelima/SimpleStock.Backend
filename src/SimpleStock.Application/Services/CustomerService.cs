@@ -2,6 +2,7 @@ using AutoMapper;
 using SimpleStock.Application.Interfaces;
 using SimpleStock.Data.Interfaces;
 using SimpleStock.Domain.DTOs.Customer;
+using SimpleStock.Domain.DTOs.Order;
 using SimpleStock.Domain.Models;
 using SimpleStock.Exception;
 

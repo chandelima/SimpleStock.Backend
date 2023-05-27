@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleStock.Infrastructure.DataContexts;
 
@@ -10,9 +11,11 @@ using SimpleStock.Infrastructure.DataContexts;
 namespace SimpleStock.Data.Migrations
 {
     [DbContext(typeof(SimpleStockDataContext))]
-    partial class SimpleStockDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230520121044_FixOrderItemFK")]
+    partial class FixOrderItemFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");

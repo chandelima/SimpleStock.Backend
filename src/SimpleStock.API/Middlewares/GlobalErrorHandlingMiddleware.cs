@@ -19,7 +19,7 @@ public class GlobalErrorHandlingMiddleware
         {
             await _next(context);
         }
-        catch (System.Exception ex)
+        catch (BaseException ex)
         { 
             await HandleExceptionAsync(context, ex);
         }
@@ -28,10 +28,6 @@ public class GlobalErrorHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, System.Exception exception)
     {
-        var exceptionType = exception.GetType();
-        if (!exceptionType.IsSubclassOf(typeof(BaseException)))
-            throw exception;
-        
         HttpStatusCode status = HttpStatusCode.BadRequest;
         string message = exception.Message;
 

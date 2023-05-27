@@ -2,6 +2,7 @@ using FluentValidation;
 using SimpleStock.Application.Validators.CustomValidators;
 using SimpleStock.Application.Validators.Shared;
 using SimpleStock.Domain.DTOs.Customer;
+using SimpleStock.Domain.DTOs.Order;
 
 namespace SimpleStock.Application.Validators;
 
