@@ -93,6 +93,24 @@ public class OrderService : IOrderService
         return await _orderRepository.Delete(order!);
     }
 
+    public async Task ProcessOrder(Guid id)
+    {
+        var order = await _orderRepository.GetById(id);
+        if (order == null) ThrowNotFound();
+
+        if (order!.OrderStatus != EOrderStatus.Pending)
+        {
+            var message = "O status da operação de venda não permite a alteração";
+            throw new NotAllowedException(message);
+        }
+
+        await _orderItemService.DecreaseOrdemItemsStock(order.OrderItems);
+        
+
+        order.OrderStatus = EOrderStatus.Completed;
+        await _orderRepository.Update(order);
+    }
+
     private static void ThrowNotFound()
     {
         var message = "Não há venda cadastrada com o ID informado.";

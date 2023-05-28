@@ -9,4 +9,5 @@ public interface IOrderService
     Task<OrderResponseDto?> AddOrder(OrderRequestDto request);
     Task<OrderResponseDto?> UpdateOrder(Guid id, OrderRequestDto request);
     Task<bool> DeleteOrder(Guid id);
+    Task ProcessOrder(Guid id);
 }

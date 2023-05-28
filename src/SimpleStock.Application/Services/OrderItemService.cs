@@ -119,9 +119,15 @@ public class OrderItemService : IOrderItemService
         return orderItems;
     }
 
-    private async Task DecreaseOrdemItemsStock(
-        ICollection<OrderItemRequestDto> items)
+    public async Task DecreaseOrdemItemsStock(
+        ICollection<OrderItemModel> items)
     {
+        var itemsRequestDto = items
+            .Select(i => _mapper.Map<OrderItemRequestDto>(i))
+            .ToList();
+
+        await CheckOrderItemsHasStock(itemsRequestDto);
+
         foreach (var item in items)
         {
             await _productService
