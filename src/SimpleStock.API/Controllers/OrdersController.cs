@@ -40,11 +40,11 @@ public class OrdersController : ControllerBase
         return Ok(order);
     }
 
-    [HttpPost("{id}")]
-    public async Task ProcessOrder(
-        [FromRoute] Guid id)
+    [HttpPost("process/{id}")]
+    public async Task<ActionResult> ProcessOrder([FromRoute] Guid id)
     {
-        //Continue from here.
+        await _orderService.ProcessOrder(id);
+        return Ok();
     }
 
     [HttpPut("{id}")]
