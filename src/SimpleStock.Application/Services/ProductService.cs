@@ -110,7 +110,7 @@ public class ProductService : IProductService
     {
         var findExistsWithName = await _productRepository.GetByName(name);
         var checkExistsWithName = findExistsWithName
-            .Where(p => p.Name == name)
+            .Where(p => p.Name == name && !p.IsDeleted)
             .ToList();
 
         if (checkExistsWithName.Count > 0)
